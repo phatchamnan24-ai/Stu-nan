@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ប្រព័ន្ធគ្រប់គ្រងសិស្ស (Admin) - NTTI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --font-khmer: 'KD Jayavarman I', 'Battambang', 'Khmer OS Battambang', sans-serif;
+      --font-english: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
+      --teal-dark: #063940;
+      --teal-mid: #0b5c61;
+      --teal-bright: #0d7a69;
+      --accent-green: #109b68;
+      --bg-page: #f3f7f8;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-khmer);
+    }
+
+    .en-font,
+    [lang="en"],
+    .long-id-tag,
+    .id-yellow-badge,
+    .phone-text,
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="date"] {
+      font-family: var(--font-english);
+    }
+
+    body {
+      font-family: var(--font-khmer);
+      background-color: var(--bg-page);
+      background-image: radial-gradient(#cbd5e1 0.65px, transparent 0.65px);
+      background-size: 18px 18px;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Login */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-mid) 100%);
+      padding: 18px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 28px 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .login-card h2 {
+      font-size: 21px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--teal-dark);
+      margin-bottom: 6px;
+    }
+
+    .login-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #ffffff;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--teal-bright);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--teal-mid), var(--teal-bright));
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .login-error {
+      margin-top: 12px;
+      color: #dc2626;
+      font-size: 13px;
+      text-align: center;
+      font-weight: 700;
+      min-height: 20px;
+    }
+
+    /* Dashboard */
+    #dashboardScreen {
+      display: none;
+    }
+
+    /* Top Bar */
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .topbar-left,
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .topbar-right {
+        width: 100%;
+      }
+      .top-search-input {
+        flex: 1;
+        width: auto !important;
+        min-width: 160px;
+      }
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 5px 11px 5px 6px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .brand-sq {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--teal-dark);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-box strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .brand-box span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .pill-add-green {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      background: var(--accent-green);
+      color: #ffffff;
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill-status-soft {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .pill-status-soft.active-nav {
+      background: var(--teal-dark);
+      color: #ffffff;
+      border-color: var(--teal-dark);
+    }
+
+    .top-search-input {
+      width: 230px !important;
+      padding: 7px 11px !important;
+      font-size: 13px !important;
+      border-radius: 9px !important;
+      border: 1px solid var(--border) !important;
+      background: #f8fafc !important;
+    }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 7px 11px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .page-wrap {
+      max-width: 1280px;
+      margin: 18px auto 48px;
+      padding: 0 14px;
+    }
+
+    .page-view {
+      display: none;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    /* Main Profile / Portal Card */
+    .portal-main-card {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.07);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .teal-banner {
+      background: linear-gradient(115deg, #052e36 0%, #095359 58%, #0d7a66 100%);
+      color: #ffffff;
+      padding: 20px 22px 58px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .banner-pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #a7f3d0;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .id-yellow-badge {
+      background: #fef08a;
+      color: #713f12;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .profile-header-row {
+      padding: 0 22px 18px;
+      margin-top: -36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .admin-photo-frame {
+      position: relative;
+      width: 88px;
+      height: 88px;
+      border-radius: 16px;
+      background: var(--teal-dark);
+      color: #ffffff;
+      border: 4px solid #ffffff;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      overflow: hidden;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .admin-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .admin-photo-dot {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #10b981;
+      border: 2px solid #ffffff;
+    }
+
+    .action-buttons-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 40px;
+    }
+
+    .btn-teal-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal-dark);
+      color: #ffffff;
+      border: none;
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-yellow-soft {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-white-bordered {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .admin-identity-info {
+      padding: 0 22px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-name-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .admin-name-line h1 {
+      font-size: 21px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .super-admin-chip {
+      background: #fef3c7;
+      color: #b45309;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .admin-meta-line {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* 6 Year/Level Cards Grid */
+    .six-year-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px 22px 22px;
+      background: #ffffff;
+    }
+
+    @media (max-width: 1120px) {
+      .six-year-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .six-year-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 14px;
+      }
+    }
+
+    .year-stat-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .year-stat-card:hover {
+      border-color: var(--teal-bright);
+      background: #f0fdfa;
+    }
+
+    .year-stat-card.highlight-total {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+    }
+
+    .year-stat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .year-stat-num {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--teal-dark);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .year-stat-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Student Table Card */
+    .table-panel {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+      padding: 18px;
+    }
+
+    .panel-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .panel-toolbar h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--teal-dark);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .filter-row {
+        width: auto;
+      }
+    }
+
+    .filter-row select {
+      flex: 1;
+      min-width: 155px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 12px 13px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 11px 13px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .long-id-tag {
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #f0fdfa;
+      color: var(--teal-dark);
+      border: 1px solid #99f6e4;
+      padding: 4px 8px;
+      border-radius: 8px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .student-flex {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .student-photo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #e6f4f1;
+      color: var(--teal-dark);
+      font-weight: 700;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+    }
+
+    .student-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .phone-text {
+      font-weight: 600;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .pay-chip {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pay-chip.paid {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .pay-chip.unpaid {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .row-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .row-select {
+      width: auto;
+      padding: 5px 8px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    .btn-sm-photo {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f0fdfa;
+      color: var(--teal-dark);
+      border: 1px solid #99f6e4;
+      padding: 6px 9px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-sm-view {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 6px 9px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-sm-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: none;
+      padding: 6px 9px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-sm-del {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 6px 9px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Sub-pages */
+    .sub-card {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 38px rgba(15, 23, 42, 0.07);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .sub-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sub-top-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-birthplace-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #6ee7b7;
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-birthplace-tab.active-bp {
+      background: var(--teal-dark);
+      color: #ffffff;
+      border-color: var(--teal-dark);
+    }
+
+    .summary-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 780px) {
+      .summary-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .summary-box-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .summary-box-item:hover {
+      border-color: var(--teal-bright);
+      background: #f0fdfa;
+    }
+
+    .summary-box-item strong {
+      display: block;
+      font-size: 14.5px;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .summary-box-item small {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .num-pill-big {
+      background: #e6f4f1;
+      color: var(--teal-dark);
+      font-size: 17px;
+      font-weight: 700;
+      padding: 5px 13px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .detail-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 15px;
+    }
+
+    .detail-box small {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 22px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 540px) {
+      .modal-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .photo-preview-box {
+      width: 140px;
+      height: 140px;
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: #f8fafc;
+      margin: 10px auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--teal-dark);
+    }
+
+    .photo-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <h2>🏛️ NTTI Admin Portal</h2>
+      <p>ប្រព័ន្ធគ្រប់គ្រងសិស្ស • <span class="en-font">National Technical Training Institute</span></p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="adminEmail">អ៊ីមែល (<span class="en-font">Email</span>)</label>
+          <input type="email" id="adminEmail" required placeholder="phatchamnan007@gmail.com" />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">ពាក្យសម្ងាត់ (<span class="en-font">Password</span>)</label>
+          <input type="password" id="adminPassword" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="login-btn">ចូលប្រើប្រាស់</button>
+        <div id="loginError" class="login-error"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboardScreen">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand-box" id="homeLogoBtn">
+          <div class="brand-sq en-font">NTTI</div>
+          <div>
+            <strong>ប្រព័ន្ធគ្រប់គ្រងសិស្ស</strong>
+            <span class="en-font">NTTI Student System</span>
+          </div>
+        </div>
+
+        <a class="pill-add-green" href="./register.html">
+          <i data-lucide="user-plus" style="width:14px;height:14px;"></i> ចុះឈ្មោះសិស្សថ្មី
+        </a>
+
+        <button type="button" class="pill-status-soft active-nav" data-page="mainPortalPage">
+          <i data-lucide="shield-check" style="width:14px;height:14px;"></i> ប្រព័ន្ធគ្រប់គ្រងសិស្សសកម្ម
+        </button>
+
+        <button type="button" class="pill-status-soft" data-page="summaryYearMajorPage">
+          <i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i> សិស្សតាមឆ្នាំ &amp; មុខវិជ្ជា
+        </button>
+
+        <button type="button" class="pill-status-soft" data-page="birthPlacePage">
+          <i data-lucide="map-pin" style="width:14px;height:14px;"></i> STUDENTS ADDRESS
+        </button>
+      </div>
+
+      <div class="topbar-right">
+        <input type="text" id="topSearchInput" class="top-search-input" placeholder="ស្វែងរកសិស្ស, លេខ ID, ឬទូរសព្ទ..." />
+        <button type="button" class="btn-logout" id="logoutBtn">
+          <i data-lucide="log-out" style="width:14px;height:14px;"></i> ចាកចេញ
+        </button>
+      </div>
+    </header>
+
+    <div class="page-wrap">
+      <!-- PAGE 1: MAIN ADMIN PORTAL -->
+      <section id="mainPortalPage" class="page-view active">
+        <div class="portal-main-card">
+          <div class="teal-banner">
+            <span class="banner-pill-tag en-font">
+              <i data-lucide="shield" style="width:13px;height:13px;"></i> NTTI • STUDENT MANAGEMENT PORTAL
+            </span>
+            <span class="id-yellow-badge" id="portalLongIdBadge">#NTTI-2026-100001</span>
+          </div>
+
+          <div class="profile-header-row">
+            <div class="admin-photo-frame en-font" id="adminPhotoFrame" title="ចុចដើម្បីដាក់/ប្តូររូបថត Admin">
+              <span id="adminPhotoInitials">AD</span>
+              <img id="adminPhotoPreview" alt="Admin Photo" loading="lazy" decoding="async" />
+              <span class="admin-photo-dot"></span>
+            </div>
+            <input type="file" id="adminPhotoUpload" accept="image/*" hidden />
+
+            <div class="action-buttons-bar">
+              <button type="button" class="btn-teal-dark" id="changeAdminPhotoBtn">
+                <i data-lucide="camera" style="width:14px;height:14px;"></i>  <span class="en-font">Admin</span>
+              </button>
+              <button type="button" class="btn-yellow-soft" id="goYearMajorBtn">
+                <i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i> សិស្សតាមឆ្នាំ &amp; មុខវិជ្ជា
+              </button>
+              <button type="button" class="btn-white-bordered" id="goBirthPlaceBtn">
+                <i data-lucide="map-pin" style="width:14px;height:14px;"></i> STUDENTS ADDRESS
+              </button>
+              <button type="button" class="btn-white-bordered" id="exportCsvBtn">
+                <i data-lucide="download" style="width:14px;height:14px;"></i> ទាញយក <span class="en-font">CSV</span>
+              </button>
+              <button type="button" class="btn-white-bordered" onclick="window.print()">
+                <i data-lucide="printer" style="width:14px;height:14px;"></i> បោះពុម្ព
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-identity-info">
+            <div class="admin-name-line">
+              <h1><span class="en-font">Admin</span> គ្រប់គ្រងសិស្ស</h1>
+              <i data-lucide="badge-check" style="width:19px;height:19px;color:#0d7a66;"></i>
+              <span class="super-admin-chip en-font">● Student Admin</span>
+            </div>
+            <div class="admin-meta-line">
+              <span>✉ <strong class="en-font" id="adminEmailText">-</strong></span>
+              <span>🎓 ប្រព័ន្ធគ្រប់គ្រងសិស្ស <span class="en-font">NTTI</span></span>
+              <span>📅 ឆ្នាំសិក្សា <strong class="en-font">2026 - 2027</strong></span>
+            </div>
+          </div>
+
+          <!-- 6 Cards -->
+          <div class="six-year-grid">
+            <div class="year-stat-card highlight-total" data-filter-year="ALL">
+              <div class="year-stat-head">
+                <span>សិស្សសរុប</span>
+                <i data-lucide="users" style="width:15px;height:15px;color:#059669;"></i>
+              </div>
+              <strong class="year-stat-num" id="countTotalAll">0</strong>
+              <span class="year-stat-sub">ទាំងអស់ក្នុងប្រព័ន្ធ</span>
+            </div>
+
+            <div class="year-stat-card" data-filter-year="ឆ្នាំទី១">
+              <div class="year-stat-head">
+                <span>ឆ្នាំទី១</span>
+                <i data-lucide="graduation-cap" style="width:15px;height:15px;color:#095359;"></i>
+              </div>
+              <strong class="year-stat-num" id="countYear1">0</strong>
+              <span class="year-stat-sub">ចំនួនសិស្សឆ្នាំទី១</span>
+            </div>
+
+            <div class="year-stat-card" data-filter-year="ឆ្នាំទី២">
+              <div class="year-stat-head">
+                <span>ឆ្នាំទី២</span>
+                <i data-lucide="graduation-cap" style="width:15px;height:15px;color:#095359;"></i>
+              </div>
+              <strong class="year-stat-num" id="countYear2">0</strong>
+              <span class="year-stat-sub">ចំនួនសិស្សឆ្នាំទី២</span>
+            </div>
+
+            <div class="year-stat-card" data-filter-year="ឆ្នាំទី៣">
+              <div class="year-stat-head">
+                <span>ឆ្នាំទី៣</span>
+                <i data-lucide="graduation-cap" style="width:15px;height:15px;color:#095359;"></i>
+              </div>
+              <strong class="year-stat-num" id="countYear3">0</strong>
+              <span class="year-stat-sub">ចំនួនសិស្សឆ្នាំទី៣</span>
+            </div>
+
+            <div class="year-stat-card" data-filter-year="ឆ្នាំទី៤">
+              <div class="year-stat-head">
+                <span>ឆ្នាំទី៤</span>
+                <i data-lucide="graduation-cap" style="width:15px;height:15px;color:#095359;"></i>
+              </div>
+              <strong class="year-stat-num" id="countYear4">0</strong>
+              <span class="year-stat-sub">ចំនួនសិស្សឆ្នាំទី៤</span>
+            </div>
+
+            <div class="year-stat-card" data-filter-year="បរិញ្ញាបត្ររង">
+              <div class="year-stat-head">
+                <span>បរិញ្ញាបត្ររង</span>
+                <i data-lucide="award" style="width:15px;height:15px;color:#0d7a66;"></i>
+              </div>
+              <strong class="year-stat-num" id="countAssociate">0</strong>
+              <span class="year-stat-sub">ចំនួនសិស្សបរិញ្ញាបត្ររង</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clean Students Table Section -->
+        <div class="table-panel">
+          <div class="panel-toolbar">
+            <h2>តារាងគ្រប់គ្រងសិស្ស (លេខ <span class="en-font">ID</span> ច្រើនខ្ទង់)</h2>
+            <div class="filter-row">
+              <select id="yearFilter">
+                <option value="ALL">ឆ្នាំ/កម្រិតទាំងអស់</option>
+                <option value="ឆ្នាំទី១">ឆ្នាំទី១</option>
+                <option value="ឆ្នាំទី២">ឆ្នាំទី២</option>
+                <option value="ឆ្នាំទី៣">ឆ្នាំទី៣</option>
+                <option value="ឆ្នាំទី៤">ឆ្នាំទី៤</option>
+                <option value="បរិញ្ញាបត្ររង">បរិញ្ញាបត្ររង</option>
+              </select>
+
+              <select id="majorFilter">
+                <option value="ALL">មុខវិជ្ជា / ជំនាញទាំងអស់</option>
+                <option value="ព័ត៌មានវិទ្យា (IT)">ព័ត៌មានវិទ្យា (<span class="en-font">IT</span>)</option>
+                <option value="បច្ចេកវិទ្យាព័ត៌មាន (IT)">បច្ចេកវិទ្យាព័ត៌មាន (<span class="en-font">IT</span>)</option>
+                <option value="អគ្គិសនី">អគ្គិសនី</option>
+                <option value="អេឡិចត្រូនិក">អេឡិចត្រូនិក</option>
+                <option value="មេកានិក">មេកានិក</option>
+                <option value="សំណង់ស៊ីវិល">សំណង់ស៊ីវិល</option>
+              </select>
+
+              <select id="paymentFilter">
+                <option value="ALL">ស្ថានភាពបង់ប្រាក់ទាំងអស់</option>
+                <option value="បានបង់ប្រាក់រួច">បានបង់ប្រាក់រួច</option>
+                <option value="មិនទាន់បង់">មិនទាន់បង់</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>លេខ <span class="en-font">ID</span></th>
+                  <th>ឈ្មោះខ្មែរ</th>
+                  <th>ឈ្មោះអង់គ្លេស (<span class="en-font">EN</span>)</th>
+                  <th>ថ្ងៃខែឆ្នាំកំណើត (<span class="en-font">DOB</span>)</th>
+                  <th>ទីកន្លែងកំណើត</th>
+                  <th>ឆ្នាំ / កម្រិត</th>
+                  <th>ជំនាញ</th>
+                  <th>លេខទូរសព្ទ</th>
+                  <th>ស្ថានភាពបង់ប្រាក់</th>
+                  <th>សកម្មភាព</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTbody">
+                <tr>
+                  <td colspan="10" style="text-align:center;padding:28px;color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE 2: TOTAL STUDENTS BY YEAR & MAJOR -->
+      <section id="summaryYearMajorPage" class="page-view">
+        <div class="sub-card">
+          <div class="sub-top-bar">
+            <div class="sub-top-left">
+              <button type="button" class="btn-white-bordered" id="backFromSummaryBtn">
+                <i data-lucide="arrow-left" style="width:15px;height:15px;"></i> ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង
+              </button>
+              <button type="button" class="btn-birthplace-tab" id="openBirthPlaceFromSummaryBtn">
+                <i data-lucide="map-pin" style="width:15px;height:15px;"></i> ទីកន្លែងកំណើត
+              </button>
+            </div>
+            <h2 style="font-size:19px;font-weight:700;color:var(--teal-dark);">សិស្សសរុបតាមឆ្នាំនីមួយៗ និងតាមមុខវិជ្ជានីមួយៗ</h2>
+          </div>
+
+          <h3 style="font-size:15.5px;font-weight:700;margin-bottom:12px;color:#0f172a;">📅 សិស្សសរុបតាមឆ្នាំ និងកម្រិត</h3>
+          <div class="summary-cards-grid" id="byYearGrid"></div>
+
+          <h3 style="font-size:15.5px;font-weight:700;margin-top:8px;margin-bottom:12px;color:#0f172a;">🎓 សិស្សសរុបតាមមុខវិជ្ជា / ជំនាញនីមួយៗ</h3>
+          <div class="summary-cards-grid" id="byMajorGrid"></div>
+        </div>
+      </section>
+
+      <!-- PAGE 2B: BIRTH PLACE PAGE -->
+      <section id="birthPlacePage" class="page-view">
+        <div class="sub-card">
+          <div class="sub-top-bar">
+            <div class="sub-top-left">
+              <button type="button" class="btn-white-bordered" id="backFromBirthPlaceToMainBtn">
+                <i data-lucide="arrow-left" style="width:15px;height:15px;"></i> ត្រឡប់ទៅផ្ទាំងគ្រប់គ្រង
+              </button>
+              <button type="button" class="btn-birthplace-tab active-bp" id="backFromBirthPlaceToSummaryBtn">
+                <i data-lucide="bar-chart-3" style="width:15px;height:15px;"></i> សិស្សតាមឆ្នាំ &amp; មុខវិជ្ជា
+              </button>
+            </div>
+            <h2 style="font-size:19px;font-weight:700;color:var(--teal-dark);">📍 ទំព័របង្ហាញទីកន្លែងកំណើតសិស្ស</h2>
+          </div>
+
+          <h3 style="font-size:15.5px;font-weight:700;margin-bottom:12px;color:#0f172a;">ចំនួនសិស្សសរុបតាមទីកន្លែងកំណើត</h3>
+          <div class="summary-cards-grid" id="byBirthPlaceGrid"></div>
+
+          <h3 style="font-size:15.5px;font-weight:700;margin-top:14px;margin-bottom:12px;color:#0f172a;">បញ្ជីទីកន្លែងកំណើតសិស្ស</h3>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>លេខ <span class="en-font">ID</span></th>
+                  <th>ឈ្មោះខ្មែរ</th>
+                  <th>ឈ្មោះអង់គ្លេស (<span class="en-font">EN</span>)</th>
+                  <th>ទីកន្លែងកំណើត</th>
+                  <th>ឆ្នាំ / កម្រិត</th>
+                  <th>ជំនាញ</th>
+                </tr>
+              </thead>
+              <tbody id="birthPlaceTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAGE 3: STUDENT DETAIL VIEW -->
+      <section id="studentDetailPage" class="page-view">
+        <div class="sub-card">
+          <div class="sub-top-bar">
+            <button type="button" class="btn-white-bordered" id="backFromDetailBtn">
+              <i data-lucide="arrow-left" style="width:15px;height:15px;"></i> ត្រឡប់ក្រោយ
+            </button>
+            <span class="long-id-tag" id="detailLongId">NTTI-2026-100001</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div class="photo-preview-box" style="margin:0;width:82px;height:82px;" id="detailPhotoWrap"></div>
+            <div>
+              <h2 style="font-size:21px;font-weight:700;color:var(--teal-dark);" id="detailKh">-</h2>
+              <p class="en-font" style="font-size:14px;color:#64748b;margin-top:3px;" id="detailEn">-</p>
+            </div>
+          </div>
+
+          <div class="detail-grid" id="detailFieldsGrid"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Student Photo Modal -->
+  <div class="modal-backdrop" id="photoModal">
+    <div class="modal-card">
+      <h3 style="font-size:17px;font-weight:700;color:var(--teal-dark);text-align:center;">រូបភាពសិស្ស</h3>
+      <p style="font-size:12.5px;color:#64748b;text-align:center;margin-top:4px;" id="photoModalStudentName">-</p>
+      <div class="photo-preview-box" id="photoModalPreview">NT</div>
+      <input type="file" id="studentPhotoFileInput" accept="image/*" style="margin-bottom:10px;" />
+      <div class="modal-actions">
+        <button type="button" class="btn-white-bordered" id="closePhotoModalBtn">បិទ</button>
+        <button type="button" class="btn-teal-dark" id="saveStudentPhotoBtn">រក្សារូបភាព</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-backdrop" id="editModal">
+    <div class="modal-card">
+      <h3 style="font-size:18px;font-weight:700;color:var(--teal-dark);margin-bottom:14px;">កែប្រែព័ត៌មានសិស្ស</h3>
+      <form id="editForm">
+        <input type="hidden" id="editDocId" />
+        <div class="modal-grid">
+          <div class="form-group">
+            <label for="editNameKh">ឈ្មោះខ្មែរ</label>
+            <input type="text" id="editNameKh" required />
+          </div>
+          <div class="form-group">
+            <label for="editNameEn">ឈ្មោះអង់គ្លេស (<span class="en-font">EN</span>)</label>
+            <input type="text" id="editNameEn" class="en-font" required />
+          </div>
+          <div class="form-group">
+            <label for="editDob">ថ្ងៃខែឆ្នាំកំណើត (<span class="en-font">DOB</span>)</label>
+            <input type="date" id="editDob" required />
+          </div>
+          <div class="form-group">
+            <label for="editBirthPlace">ទីកន្លែងកំណើត</label>
+            <input type="text" id="editBirthPlace" placeholder="បញ្ចូលទីកន្លែងកំណើត" />
+          </div>
+          <div class="form-group">
+            <label for="editYearLevel">ឆ្នាំ / កម្រិតសិក្សា</label>
+            <select id="editYearLevel">
+              <option value="ឆ្នាំទី១">ឆ្នាំទី១</option>
+              <option value="ឆ្នាំទី២">ឆ្នាំទី២</option>
+              <option value="ឆ្នាំទី៣">ឆ្នាំទី៣</option>
+              <option value="ឆ្នាំទី៤">ឆ្នាំទី៤</option>
+              <option value="បរិញ្ញាបត្ររង">បរិញ្ញាបត្ររង</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editPhone">លេខទូរសព្ទ</label>
+            <input type="tel" id="editPhone" required />
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="editPayment">ស្ថានភាពបង់ប្រាក់</label>
+            <select id="editPayment">
+              <option value="មិនទាន់បង់">មិនទាន់បង់</option>
+              <option value="បានបង់ប្រាក់រួច">បានបង់ប្រាក់រួច</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-white-bordered" id="cancelEditBtn">បោះបង់</button>
+          <button type="submit" class="btn-teal-dark">រក្សាទុក</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3hCrIMc5mvh4M0df7F-nQNvD_uynq1JY",
+      authDomain: "nan-project-6fcea.firebaseapp.com",
+      projectId: "nan-project-6fcea",
+      storageBucket: "nan-project-6fcea.firebasestorage.app",
+      messagingSenderId: "776441851200",
+      appId: "1:776441851200:web:402f7bddb2e811c1019ea5",
+      measurementId: "G-ZB9P8WCDNZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboardScreen = document.getElementById("dashboardScreen");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const studentsTbody = document.getElementById("studentsTbody");
+    const topSearchInput = document.getElementById("topSearchInput");
+    const yearFilter = document.getElementById("yearFilter");
+    const majorFilter = document.getElementById("majorFilter");
+    const paymentFilter = document.getElementById("paymentFilter");
+
+    const editModal = document.getElementById("editModal");
+    const editForm = document.getElementById("editForm");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+
+    const photoModal = document.getElementById("photoModal");
+    const studentPhotoFileInput = document.getElementById("studentPhotoFileInput");
+    const photoModalPreview = document.getElementById("photoModalPreview");
+
+    let studentsList = [];
+    let unsubscribe = null;
+    let activePhotoStudentId = null;
+    let pendingCompressedPhoto = "";
+
+    function icons() {
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function openPage(pageId) {
+      document.querySelectorAll(".page-view").forEach((v) => v.classList.toggle("active", v.id === pageId));
+      document.querySelectorAll(".pill-status-soft[data-page]").forEach((b) => {
+        b.classList.toggle("active-nav", b.getAttribute("data-page") === pageId);
+      });
+      icons();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".pill-status-soft[data-page]").forEach((btn) => {
+      btn.addEventListener("click", () => openPage(btn.getAttribute("data-page")));
+    });
+
+    document.getElementById("homeLogoBtn").addEventListener("click", () => openPage("mainPortalPage"));
+    document.getElementById("goYearMajorBtn").addEventListener("click", () => openPage("summaryYearMajorPage"));
+    document.getElementById("goBirthPlaceBtn").addEventListener("click", () => openPage("birthPlacePage"));
+    document.getElementById("openBirthPlaceFromSummaryBtn").addEventListener("click", () => openPage("birthPlacePage"));
+    document.getElementById("backFromSummaryBtn").addEventListener("click", () => openPage("mainPortalPage"));
+    document.getElementById("backFromBirthPlaceToMainBtn").addEventListener("click", () => openPage("mainPortalPage"));
+    document.getElementById("backFromBirthPlaceToSummaryBtn").addEventListener("click", () => openPage("summaryYearMajorPage"));
+    document.getElementById("backFromDetailBtn").addEventListener("click", () => openPage("mainPortalPage"));
+
+    function compressImageFile(file, maxSize = 280, quality = 0.65) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            let w = img.width;
+            let h = img.height;
+            if (w > h && w > maxSize) {
+              h = Math.round((h * maxSize) / w);
+              w = maxSize;
+            } else if (h >= w && h > maxSize) {
+              w = Math.round((w * maxSize) / h);
+              h = maxSize;
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, w);
+            canvas.height = Math.max(1, h);
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          };
+          img.onerror = reject;
+          img.src = reader.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function syncAdminPhoto() {
+      const saved = localStorage.getItem("ntti_admin_photo_teal");
+      const img = document.getElementById("adminPhotoPreview");
+      const init = document.getElementById("adminPhotoInitials");
+      if (saved) {
+        img.src = saved;
+        img.style.display = "block";
+        init.style.display = "none";
+      } else {
+        img.style.display = "none";
+        init.style.display = "block";
+      }
+    }
+
+    document.getElementById("changeAdminPhotoBtn").addEventListener("click", () => {
+      document.getElementById("adminPhotoUpload").click();
+    });
+
+    document.getElementById("adminPhotoFrame").addEventListener("click", () => {
+      document.getElementById("adminPhotoUpload").click();
+    });
+
+    document.getElementById("adminPhotoUpload").addEventListener("change", async (e) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      try {
+        const compressed = await compressImageFile(f, 240, 0.7);
+        localStorage.setItem("ntti_admin_photo_teal", compressed);
+        syncAdminPhoto();
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    function esc(v = "") {
+      return String(v)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function makeLongId(student, idx) {
+      if (student.studentCode && String(student.studentCode).length >= 12) return student.studentCode;
+      return `NTTI-2026-${String(100001 + idx).padStart(6, "0")}`;
+    }
+
+    function normalizeYearOrLevel(s) {
+      const raw = String(s.studyYear || s.level || "").trim();
+      if (raw.includes("បរិញ្ញាបត្ររង") || raw.toLowerCase().includes("associate")) return "បរិញ្ញាបត្ររង";
+      if (raw.includes("១") || raw.includes("1")) return "ឆ្នាំទី១";
+      if (raw.includes("២") || raw.includes("2")) return "ឆ្នាំទី២";
+      if (raw.includes("៣") || raw.includes("3")) return "ឆ្នាំទី៣";
+      if (raw.includes("៤") || raw.includes("4")) return "ឆ្នាំទី៤";
+      return raw || "ឆ្នាំទី១";
+    }
+
+    function getBirthPlace(s) {
+      return (s.birthPlace || s.placeOfBirth || s.address || "").trim() || "មិនទាន់បញ្ចូលទីកន្លែងកំណើត";
+    }
+
+    function getStudentPhotoSrc(student) {
+      return (
+        student.photoUrl ||
+        student.imageUrl ||
+        student.avatar ||
+        student.photo ||
+        student.photoBase64 ||
+        ""
+      );
+    }
+
+    function getInit(en = "", kh = "") {
+      const base = (en || kh || "NT").trim();
+      const parts = base.split(/\s+/);
+      return parts.length >= 2 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : base.slice(0, 2).toUpperCase();
+    }
+
+    function updateYearLevelCounters() {
+      const all = studentsList.map((s) => normalizeYearOrLevel(s));
+      document.getElementById("countTotalAll").textContent = studentsList.length;
+      document.getElementById("countYear1").textContent = all.filter((y) => y === "ឆ្នាំទី១").length;
+      document.getElementById("countYear2").textContent = all.filter((y) => y === "ឆ្នាំទី២").length;
+      document.getElementById("countYear3").textContent = all.filter((y) => y === "ឆ្នាំទី៣").length;
+      document.getElementById("countYear4").textContent = all.filter((y) => y === "ឆ្នាំទី៤").length;
+      document.getElementById("countAssociate").textContent = all.filter((y) => y === "បរិញ្ញាបត្ររង").length;
+    }
+
+    function renderYearAndMajorSummary() {
+      const fixedLevels = ["ឆ្នាំទី១", "ឆ្នាំទី២", "ឆ្នាំទី៣", "ឆ្នាំទី៤", "បរិញ្ញាបត្ររង"];
+      const yearCounts = {};
+      fixedLevels.forEach((lvl) => (yearCounts[lvl] = 0));
+
+      const majorCounts = {};
+      studentsList.forEach((s) => {
+        const y = normalizeYearOrLevel(s);
+        yearCounts[y] = (yearCounts[y] || 0) + 1;
+
+        const m = s.major || "មិនបានកំណត់ជំនាញ";
+        majorCounts[m] = (majorCounts[m] || 0) + 1;
+      });
+
+      document.getElementById("byYearGrid").innerHTML = Object.entries(yearCounts)
+        .map(
+          ([yr, cnt]) => `
+            <div class="summary-box-item">
+              <div>
+                <strong>${esc(yr)}</strong>
+                <small>ចំនួនសិស្សសរុប</small>
+              </div>
+              <span class="num-pill-big">${cnt} នាក់</span>
+            </div>
+          `
+        )
+        .join("");
+
+      const majorEntries = Object.entries(majorCounts);
+      document.getElementById("byMajorGrid").innerHTML = majorEntries.length
+        ? majorEntries
+            .map(
+              ([mj, cnt]) => `
+                <div class="summary-box-item">
+                  <div>
+                    <strong>${esc(mj)}</strong>
+                    <small>ចំនួនសិស្សសរុបតាមមុខវិជ្ជា/ជំនាញ</small>
+                  </div>
+                  <span class="num-pill-big">${cnt} នាក់</span>
+                </div>
+              `
+            )
+            .join("")
+        : `<div class="detail-box"><small>មិនទាន់មានទិន្នន័យមុខវិជ្ជា</small></div>`;
+    }
+
+    function renderBirthPlacePage() {
+      const bpCounts = {};
+      studentsList.forEach((s) => {
+        const bp = getBirthPlace(s);
+        bpCounts[bp] = (bpCounts[bp] || 0) + 1;
+      });
+
+      const bpEntries = Object.entries(bpCounts);
+      document.getElementById("byBirthPlaceGrid").innerHTML = bpEntries.length
+        ? bpEntries
+            .map(
+              ([bp, cnt]) => `
+                <div class="summary-box-item">
+                  <div>
+                    <strong>📍 ${esc(bp)}</strong>
+                    <small>ចំនួនសិស្សតាមទីកន្លែងកំណើត</small>
+                  </div>
+                  <span class="num-pill-big">${cnt} នាក់</span>
+                </div>
+              `
+            )
+            .join("")
+        : `<div class="detail-box"><small>មិនទាន់មានទិន្នន័យទីកន្លែងកំណើត</small></div>`;
+
+      document.getElementById("birthPlaceTbody").innerHTML = studentsList.length
+        ? studentsList
+            .map((s, idx) => {
+              const lid = makeLongId(s, idx);
+              return `
+                <tr>
+                  <td><span class="long-id-tag">${esc(lid)}</span></td>
+                  <td><strong>${esc(s.nameKh || "-")}</strong></td>
+                  <td><span class="en-font">${esc(s.nameEn || "-")}</span></td>
+                  <td><strong>${esc(getBirthPlace(s))}</strong></td>
+                  <td>${esc(normalizeYearOrLevel(s))}</td>
+                  <td>${esc(s.major || "-")}</td>
+                </tr>
+              `;
+            })
+            .join("")
+        : `<tr><td colspan="6" style="text-align:center;padding:24px;color:#64748b;">មិនមានទិន្នន័យសិស្សទេ</td></tr>`;
+    }
+
+    function openPhotoModal(student) {
+      activePhotoStudentId = student.id;
+      const existing = getStudentPhotoSrc(student);
+      pendingCompressedPhoto = existing;
+      studentPhotoFileInput.value = "";
+      document.getElementById("photoModalStudentName").textContent = `${student.nameKh || ""} (${student.nameEn || ""})`;
+
+      if (existing) {
+        photoModalPreview.innerHTML = `<img src="${esc(existing)}" alt="Student" />`;
+      } else {
+        photoModalPreview.innerHTML = `<span class="en-font">${esc(getInit(student.nameEn, student.nameKh))}</span>`;
+      }
+      photoModal.classList.add("open");
+    }
+
+    studentPhotoFileInput.addEventListener("change", async (e) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      try {
+        pendingCompressedPhoto = await compressImageFile(f, 320, 0.65);
+        photoModalPreview.innerHTML = `<img src="${esc(pendingCompressedPhoto)}" alt="Preview" />`;
+      } catch (err) {
+        alert("មិនអាចអានរូបភាពបានទេ");
+      }
+    });
+
+    document.getElementById("closePhotoModalBtn").addEventListener("click", () => {
+      photoModal.classList.remove("open");
+      activePhotoStudentId = null;
+    });
+
+    document.getElementById("saveStudentPhotoBtn").addEventListener("click", async () => {
+      if (!activePhotoStudentId) return;
+      try {
+        if (pendingCompressedPhoto) {
+          await updateDoc(doc(db, "students", activePhotoStudentId), {
+            photoUrl: pendingCompressedPhoto
+          });
+        }
+        photoModal.classList.remove("open");
+      } catch (err) {
+        alert("បរាជ័យក្នុងការរក្សារូបភាពទៅ Firestore៖ " + err.message);
+      }
+    });
+
+    function openDetail(student, longId) {
+      document.getElementById("detailLongId").textContent = longId;
+      document.getElementById("detailKh").textContent = student.nameKh || "-";
+      document.getElementById("detailEn").textContent = student.nameEn || "-";
+
+      const pSrc = getStudentPhotoSrc(student);
+      document.getElementById("detailPhotoWrap").innerHTML = pSrc
+        ? `<img src="${esc(pSrc)}" alt="Student" loading="lazy" decoding="async" />`
+        : `<span class="en-font">${esc(getInit(student.nameEn, student.nameKh))}</span>`;
+
+      const list = [
+        ["ឈ្មោះខ្មែរ", student.nameKh || "-"],
+        ["ឈ្មោះអង់គ្លេស (<span class='en-font'>EN</span>)", `<span class="en-font">${esc(student.nameEn || "-")}</span>`],
+        ["ថ្ងៃខែឆ្នាំកំណើត (<span class='en-font'>DOB</span>)", `<span class="en-font">${esc(student.dob || "-")}</span>`],
+        ["ទីកន្លែងកំណើត", getBirthPlace(student)],
+        ["ឆ្នាំ / កម្រិតសិក្សា", normalizeYearOrLevel(student)],
+        ["ជំនាញ / មុខវិជ្ជា", student.major || "-"],
+        ["លេខទូរសព្ទ", `<span class="en-font">${esc(student.phone || "-")}</span>`],
+        ["ភេទ", student.gender || "-"],
+        ["ស្ថានភាពបង់ប្រាក់", student.paymentStatus || "មិនទាន់បង់"],
+        ["លេខ <span class='en-font'>ID</span>", `<span class="en-font">${esc(longId)}</span>`]
+      ];
+
+      document.getElementById("detailFieldsGrid").innerHTML = list
+        .map(
+          ([k, v]) => `
+            <div class="detail-box">
+              <small>${k}</small>
+              <strong style="font-size:15px;">${v}</strong>
+            </div>
+          `
+        )
+        .join("");
+
+      openPage("studentDetailPage");
+    }
+
+    function getFilteredStudents() {
+      const kw = topSearchInput.value.trim().toLowerCase();
+      const yr = yearFilter.value;
+      const maj = majorFilter.value;
+      const pay = paymentFilter.value;
+
+      return studentsList
+        .map((s, idx) => ({ ...s, longId: makeLongId(s, idx), yearLevel: normalizeYearOrLevel(s), bpText: getBirthPlace(s) }))
+        .filter((s) => {
+          const matchYear = yr === "ALL" || s.yearLevel === yr;
+          const matchMaj = maj === "ALL" || s.major === maj;
+          const matchPay = pay === "ALL" || s.paymentStatus === pay;
+          const text = [s.longId, s.nameKh, s.nameEn, s.dob, s.bpText, s.phone, s.major, s.yearLevel].join(" ").toLowerCase();
+          return matchYear && matchMaj && matchPay && (!kw || text.includes(kw));
+        });
+    }
+
+    function openEdit(student) {
+      document.getElementById("editDocId").value = student.id;
+      document.getElementById("editNameKh").value = student.nameKh || "";
+      document.getElementById("editNameEn").value = student.nameEn || "";
+      document.getElementById("editDob").value = student.dob || "";
+      document.getElementById("editBirthPlace").value = student.birthPlace || student.placeOfBirth || "";
+      document.getElementById("editYearLevel").value = normalizeYearOrLevel(student);
+      document.getElementById("editPhone").value = student.phone || "";
+      document.getElementById("editPayment").value = student.paymentStatus || "មិនទាន់បង់";
+      editModal.classList.add("open");
+    }
+
+    cancelEditBtn.addEventListener("click", () => editModal.classList.remove("open"));
+
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("editDocId").value;
+      const chosenYear = document.getElementById("editYearLevel").value;
+      try {
+        await updateDoc(doc(db, "students", id), {
+          nameKh: document.getElementById("editNameKh").value.trim(),
+          nameEn: document.getElementById("editNameEn").value.trim(),
+          dob: document.getElementById("editDob").value,
+          birthPlace: document.getElementById("editBirthPlace").value.trim(),
+          studyYear: chosenYear,
+          level: chosenYear,
+          phone: document.getElementById("editPhone").value.trim(),
+          paymentStatus: document.getElementById("editPayment").value
+        });
+        editModal.classList.remove("open");
+      } catch (err) {
+        alert("បរាជ័យក្នុងការកែប្រែ៖ " + err.message);
+      }
+    });
+
+    function renderAll() {
+      updateYearLevelCounters();
+      renderYearAndMajorSummary();
+      renderBirthPlacePage();
+
+      const filtered = getFilteredStudents();
+      if (filtered.length > 0) {
+        document.getElementById("portalLongIdBadge").textContent = `#${filtered[0].longId}`;
+      }
+
+      if (filtered.length === 0) {
+        studentsTbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:28px;color:#64748b;">មិនមានទិន្នន័យសិស្សទេ</td></tr>`;
+        icons();
+        return;
+      }
+
+      studentsTbody.innerHTML = filtered
+        .map((s) => {
+          const isPaid = s.paymentStatus === "បានបង់ប្រាក់រួច";
+          const pSrc = getStudentPhotoSrc(s);
+          const avatarHtml = pSrc
+            ? `<img src="${esc(pSrc)}" alt="${esc(s.nameKh || "Student")}" loading="lazy" decoding="async" />`
+            : `<span class="en-font">${esc(getInit(s.nameEn, s.nameKh))}</span>`;
+
+          return `
+            <tr>
+              <td><span class="long-id-tag">${esc(s.longId)}</span></td>
+              <td>
+                <div class="student-flex">
+                  <div class="student-photo-box photo-trigger" data-id="${esc(s.id)}" title="ចុចមើល/ដាក់រូបភាព">${avatarHtml}</div>
+                  <strong>${esc(s.nameKh || "-")}</strong>
+                </div>
+              </td>
+              <td><span class="en-font">${esc(s.nameEn || "-")}</span></td>
+              <td><span class="en-font">${esc(s.dob || "-")}</span></td>
+              <td>${esc(s.bpText)}</td>
+              <td>${esc(s.yearLevel)}</td>
+              <td>${esc(s.major || "-")}</td>
+              <td><span class="phone-text">${esc(s.phone || "-")}</span></td>
+              <td>
+                <span class="pay-chip ${isPaid ? "paid" : "unpaid"}">
+                  ${esc(s.paymentStatus || "មិនទាន់បង់")}
+                </span>
+              </td>
+              <td>
+                <div class="row-actions">
+                  <select class="row-select pay-sel" data-id="${esc(s.id)}">
+                    <option value="មិនទាន់បង់" ${!isPaid ? "selected" : ""}>មិនទាន់បង់</option>
+                    <option value="បានបង់ប្រាក់រួច" ${isPaid ? "selected" : ""}>បានបង់ប្រាក់រួច</option>
+                  </select>
+                  <button type="button" class="btn-sm-photo photo-trigger" data-id="${esc(s.id)}">
+                    <i data-lucide="image" style="width:13px;height:13px;"></i> រូបភាព
+                  </button>
+                  <button type="button" class="btn-sm-view view-btn" data-id="${esc(s.id)}">
+                    <i data-lucide="eye" style="width:13px;height:13px;"></i> មើល
+                  </button>
+                  <button type="button" class="btn-sm-edit edit-btn" data-id="${esc(s.id)}">
+                    <i data-lucide="pencil" style="width:13px;height:13px;"></i> កែ
+                  </button>
+                  <button type="button" class="btn-sm-del del-btn" data-id="${esc(s.id)}">
+                    <i data-lucide="trash-2" style="width:13px;height:13px;"></i> លុប
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      icons();
+
+      studentsTbody.querySelectorAll(".photo-trigger").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          const found = filtered.find((item) => item.id === id);
+          if (found) openPhotoModal(found);
+        });
+      });
+
+      studentsTbody.querySelectorAll(".pay-sel").forEach((sel) => {
+        sel.addEventListener("change", async (e) => {
+          const id = e.target.getAttribute("data-id");
+          try {
+            await updateDoc(doc(db, "students", id), { paymentStatus: e.target.value });
+          } catch (err) {
+            alert("បរាជ័យ៖ " + err.message);
+          }
+        });
+      });
+
+      studentsTbody.querySelectorAll(".view-btn").forEach((b) => {
+        b.addEventListener("click", (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          const found = filtered.find((item) => item.id === id);
+          if (found) openDetail(found, found.longId);
+        });
+      });
+
+      studentsTbody.querySelectorAll(".edit-btn").forEach((b) => {
+        b.addEventListener("click", (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          const found = filtered.find((item) => item.id === id);
+          if (found) openEdit(found);
+        });
+      });
+
+      studentsTbody.querySelectorAll(".del-btn").forEach((b) => {
+        b.addEventListener("click", async (e) => {
+          const id = e.currentTarget.getAttribute("data-id");
+          if (!confirm("តើអ្នកពិតជាចង់លុបទិន្នន័យសិស្សនេះមែនទេ?")) return;
+          try {
+            await deleteDoc(doc(db, "students", id));
+          } catch (err) {
+            alert("បរាជ័យក្នុងការលុប៖ " + err.message);
+          }
+        });
+      });
+    }
+
+    document.querySelectorAll(".year-stat-card[data-filter-year]").forEach((card) => {
+      card.addEventListener("click", () => {
+        yearFilter.value = card.getAttribute("data-filter-year");
+        renderAll();
+        document.querySelector(".table-panel")?.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    function exportCsv() {
+      const rows = getFilteredStudents();
+      const headers = ["Student ID", "Name (KH)", "Name (EN)", "DOB", "Birth Place", "Year/Level", "Major", "Phone", "Payment Status"];
+      const lines = [
+        headers.join(","),
+        ...rows.map((r) =>
+          [r.longId, r.nameKh || "", r.nameEn || "", r.dob || "", r.bpText || "", r.yearLevel || "", r.major || "", r.phone || "", r.paymentStatus || ""]
+            .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+            .join(",")
+        )
+      ];
+      const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ntti_students.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function startSync() {
+      if (unsubscribe) unsubscribe();
+      const q = query(collection(db, "students"), orderBy("createdAt", "desc"));
+      unsubscribe = onSnapshot(
+        q,
+        (snap) => {
+          studentsList = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          renderAll();
+        },
+        (err) => {
+          console.error(err);
+          studentsTbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:28px;color:#b91c1c;">Error: ${esc(err.message)}</td></tr>`;
+        }
+      );
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("adminEmailText").textContent = user.email || "Admin";
+        loginScreen.style.display = "none";
+        dashboardScreen.style.display = "block";
+        syncAdminPhoto();
+        icons();
+        startSync();
+      } else {
+        if (unsubscribe) {
+          unsubscribe();
+          unsubscribe = null;
+        }
+        dashboardScreen.style.display = "none";
+        loginScreen.style.display = "flex";
+      }
+    });
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginError.textContent = "";
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          document.getElementById("adminEmail").value.trim(),
+          document.getElementById("adminPassword").value
+        );
+      } catch (err) {
+        console.error(err);
+        loginError.textContent = "❌ អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ!";
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => signOut(auth));
+    topSearchInput.addEventListener("input", renderAll);
+    yearFilter.addEventListener("change", renderAll);
+    majorFilter.addEventListener("change", renderAll);
+    paymentFilter.addEventListener("change", renderAll);
+    document.getElementById("exportCsvBtn").addEventListener("click", exportCsv);
+
+    icons();
+  </script>
+</body>
+</html>
